@@ -1,97 +1,192 @@
-# SCXML
+# SCXMLViz
 
-[![Github Actions Status](/workflows/Build/badge.svg)](/actions/workflows/build.yml)
+A Python + JupyterLab extension for visualizing **SCXML state machines**. 
+[PyPi Link](https://pypi.org/project/SCXML/0.1.0/)
 
-A JupyterLab extension.
+Supports:
 
-## Requirements
+- ✅ Inline rendering in **Jupyter Notebooks**
+- ✅ Standalone `.html` exports from Python scripts
+- ✅ SCXML Viewer & Editor in **JupyterLab**
+- ✅ Fully self-contained — bundled JS/CSS for offline use
 
-- JupyterLab >= 4.0.0
+---
 
-## Install
+## 📦 Installation
 
-To install the extension, execute:
+Install from PyPI:
 
 ```bash
-pip install SCXML
+pip install scxmlviz
 ```
 
-## Uninstall
+---
 
-To remove the extension, execute:
+## 🧰 Requirements
 
-```bash
-pip uninstall SCXML
+- Python ≥ 3.6
+- JupyterLab ≥ 4.0.0
+- NodeJS (for development builds)
+
+---
+
+## 📓 Usage in Jupyter Notebook
+
+Render a state machine inline:
+
+```python
+from scxmlviz import display_scxml
+
+display_scxml("""
+<scxml initial="on">
+  <state id="on"><transition event="stop" target="off"/></state>
+  <state id="off"><transition event="start" target="on"/></state>
+</scxml>
+""", current_state="on")
 ```
 
-## Contributing
+✅ The diagram will render interactively inside the notebook output cell.
 
-### Development install
+---
 
-Note: You will need NodeJS to build the extension package.
+## 🐍 Usage in Python Scripts (Export HTML)
 
-The `jlpm` command is JupyterLab's pinned version of
-[yarn](https://yarnpkg.com/) that is installed with JupyterLab. You may use
-`yarn` or `npm` in lieu of `jlpm` below.
+Generate a fully self-contained HTML file:
 
-```bash
-# Clone the repo to your local environment
-# Change directory to the SCXML directory
-# Install package in development mode
-pip install -e "."
-# Link your development version of the extension with JupyterLab
-jupyter labextension develop . --overwrite
-# Rebuild extension Typescript source after making changes
-jlpm build
+```python
+from scxmlviz import save_scxml
+
+save_scxml("""
+<scxml initial="off">
+  <state id="off"><transition event="start" target="on"/></state>
+  <state id="on"><transition event="stop" target="off"/></state>
+</scxml>
+""", current_state="off", output_path="diagram.html")
 ```
 
-You can watch the source directory and run JupyterLab at the same time in different terminals to watch for changes in the extension's source and automatically rebuild the extension.
+✅ Open `diagram.html` in your browser — works offline, no Jupyter required.
+
+---
+
+## 🧩 JupyterLab Integration
+
+SCXMLViz includes two built-in panels:
+
+- **SCXML Viewer**
+- **SCXML Editor**
+
+### Launching inside JupyterLab
 
 ```bash
-# Watch the source directory in one terminal, automatically rebuilding when needed
-jlpm watch
-# Run JupyterLab in another terminal
 jupyter lab
 ```
 
-With the watch command running, every saved change will immediately be built locally and available in your running JupyterLab. Refresh JupyterLab to load the change in your browser (you may need to wait several seconds for the extension to be rebuilt).
+Then open the Command Palette (`Ctrl+Shift+C` or `Cmd+Shift+C`) and select:
 
-By default, the `jlpm build` command generates the source maps for this extension to make it easier to debug using the browser dev tools. To also generate source maps for the JupyterLab core extensions, you can run the following command:
+- `Open SCXML Viewer`
+- `Open SCXML Editor`
+
+---
+
+## 🔧 Developer Setup
+
+### 1. Clone + install
 
 ```bash
-jupyter lab build --minimize=False
+git clone https://github.com/yourname/scxmlviz
+cd scxmlviz
+
+# Install Python package
+pip install -e .
+
+# Install frontend dependencies
+jlpm install
 ```
 
-### Development uninstall
+---
+
+### 2. Build the extension
 
 ```bash
-pip uninstall SCXML
+jlpm build
+jupyter labextension develop . --overwrite
+jupyter lab build
 ```
 
-In development mode, you will also need to remove the symlink created by `jupyter labextension develop`
-command. To find its location, you can run `jupyter labextension list` to figure out where the `labextensions`
-folder is located. Then you can remove the symlink named `SCXML` within that folder.
+Now run:
 
-### Testing the extension
+```bash
+jupyter lab
+```
 
-#### Frontend tests
+✅ Your viewer/editor panels will be available from the command palette.
 
-This extension is using [Jest](https://jestjs.io/) for JavaScript code testing.
+---
 
-To execute them, execute:
+## 🧪 Dev Workflow Commands
 
-```sh
-jlpm
+| Command                     | Purpose                                 |
+|-----------------------------|------------------------------------------|
+| `jlpm clean`                | Clear old frontend build files           |
+| `jlpm build`                | Compile frontend + notebook bundle       |
+| `jupyter lab`               | Launch the JupyterLab UI                 |
+| `pip install -e .`          | Dev-install the Python library           |
+| `twine upload dist/*`       | Publish to PyPI                          |
+
+---
+
+## 🧪 Testing
+
+### Frontend (JS)
+
+```bash
 jlpm test
 ```
 
-#### Integration tests
+### Python
 
-This extension uses [Playwright](https://playwright.dev/docs/intro) for the integration tests (aka user level tests).
-More precisely, the JupyterLab helper [Galata](https://github.com/jupyterlab/jupyterlab/tree/master/galata) is used to handle testing the extension in JupyterLab.
+You can test `display_scxml()` and `save_scxml()` directly in a notebook or script.
 
-More information are provided within the [ui-tests](./ui-tests/README.md) README.
+---
 
-### Packaging the extension
+## 📦 Publishing to PyPI
 
-See [RELEASE](RELEASE.md)
+1. Update metadata in `setup.py`:
+
+```python
+setup(
+  name='scxmlviz',
+  version='0.1.0',
+  ...
+  include_package_data=True,
+  package_data={'scxmlviz': ['static/*.js']},
+)
+```
+
+2. Build the package:
+
+```bash
+python -m build
+```
+
+3. Upload to PyPI:
+
+```bash
+twine upload dist/*
+```
+
+---
+
+## 🔗 Resources
+
+- 📄 SCXML spec: https://www.w3.org/TR/scxml/
+- Based on [SCXMLVisualization](https://github.com/redrede/SCXMLVisualization)
+- Powered by JupyterLab extensions and Webpack bundling
+
+---
+
+## 🧠 Credits
+
+Created by Dat Nguyen  
+Licensed under MIT  
+Built with ❤️ for visualizing complex state machines
