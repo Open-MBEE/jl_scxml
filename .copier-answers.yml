@@ -1,0 +1,14 @@
+# Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
+_commit: v4.3.8
+_src_path: https://github.com/jupyterlab/extension-template
+author_email: thanhdat19022001@gmail.com
+author_name: SCXML
+has_binder: false
+has_settings: true
+kind: frontend
+labextension_name: SCXML
+project_short_description: A JupyterLab extension.
+python_name: SCXML
+repository: ''
+test: true
+
