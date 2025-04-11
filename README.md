@@ -1,4 +1,4 @@
-# SCXMLViz
+# SCXMLViz for JupyterLab
 
 A Python + JupyterLab extension for visualizing **SCXML state machines**. 
 [PyPi Link](https://pypi.org/project/SCXML/0.1.0/)
