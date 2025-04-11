@@ -188,5 +188,5 @@ twine upload dist/*
 ## 🧠 Credits
 
 Created by Dat Nguyen  
-Licensed under MIT  
+Licensed under Apache 2.0 
 Built with ❤️ for visualizing complex state machines
